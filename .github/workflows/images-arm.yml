@@ -17,9 +17,12 @@ jobs:
           repository: dependabot/dependabot-core
 
       - name: Checkout latest tag
+        id: latest-tag
         run: |
           git fetch --tags
-          git checkout $(git describe --tags $(git rev-list --tags --max-count=1))
+          tag=$(git describe --tags $(git rev-list --tags --max-count=1))
+          git checkout $tag
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
 
       - name: Docker tags
         id: tags
@@ -28,7 +31,7 @@ jobs:
           images: ghcr.io/andrcuns/dependabot-updater-core
           flavor: latest=false
           tags: |
-            type=semver,pattern={{version}}
+            type=semver,pattern={{version}},value=${{ steps.latest-tag.outputs.tag }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -85,9 +88,12 @@ jobs:
           repository: dependabot/dependabot-core
 
       - name: Checkout latest tag
+        id: latest-tag
         run: |
           git fetch --tags
-          git checkout $(git describe --tags $(git rev-list --tags --max-count=1))
+          tag=$(git describe --tags $(git rev-list --tags --max-count=1))
+          git checkout $tag
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
 
       - name: Docker tags
         id: tags
@@ -96,7 +102,7 @@ jobs:
           images: ghcr.io/andrcuns/dependabot-updater-${{ matrix.suite.ecosystem }}
           flavor: latest=false
           tags: |
-            type=semver,pattern={{version}}
+            type=semver,pattern={{version}},value=${{ steps.latest-tag.outputs.tag }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
