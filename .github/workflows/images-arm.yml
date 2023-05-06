@@ -2,27 +2,38 @@ name: Build dependabot arm images
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 6 * * *'
+  push:
+    branches:
+      - main
+    paths:
+      - Gemfile.lock
 
 jobs:
-  build-push-core-image:
-    name: Build Core
+  dependabot-version:
+    name: Get Dependabot version
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.dependabot-version.outputs.version }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          repository: dependabot/dependabot-core
 
-      - name: Checkout latest tag
-        id: latest-tag
+      - name: Fetch dependabot version
+        id: dependabot-version
         run: |
-          git fetch --tags
-          tag=$(git describe --tags $(git rev-list --tags --max-count=1))
-          git checkout $tag
-          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          version=$(echo `awk '/dependabot-omnibus \([0-9.]+\)/ {print $2}' Gemfile.lock | sed 's/[()]//g'`)
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+  build-push-core-image:
+    name: Build Core
+    runs-on: ubuntu-latest
+    needs: dependabot-version
+    steps:
+      - name: Checkout dependabot repository
+        uses: actions/checkout@v3
+        with:
+          repository: dependabot/dependabot-core
+          ref: v${{ needs.dependabot-version.outputs.version }}
 
       - name: Docker tags
         id: tags
@@ -31,7 +42,7 @@ jobs:
           images: ghcr.io/andrcuns/dependabot-updater-core
           flavor: latest=true
           tags: |
-            type=semver,pattern={{version}},value=${{ steps.latest-tag.outputs.tag }}
+            type=semver,pattern={{version}},value=${{ needs.dependabot-version.outputs.version }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -60,7 +71,9 @@ jobs:
   build-push-updater-image:
     name: Build Ecosystems
     runs-on: ubuntu-latest
-    needs: build-push-core-image
+    needs:
+      - dependabot-version
+      - build-push-core-image
     strategy:
       fail-fast: false
       matrix:
@@ -82,19 +95,11 @@ jobs:
           - { name: python, ecosystem: pip }
           - { name: terraform, ecosystem: terraform }
     steps:
-      - name: Checkout code
+      - name: Checkout dependabot repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
           repository: dependabot/dependabot-core
-
-      - name: Checkout latest tag
-        id: latest-tag
-        run: |
-          git fetch --tags
-          tag=$(git describe --tags $(git rev-list --tags --max-count=1))
-          git checkout $tag
-          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          ref: v${{ needs.dependabot-version.outputs.version }}
 
       - name: Docker tags
         id: tags
@@ -103,7 +108,7 @@ jobs:
           images: ghcr.io/andrcuns/dependabot-updater-${{ matrix.suite.ecosystem }}
           flavor: latest=true
           tags: |
-            type=semver,pattern={{version}},value=${{ steps.latest-tag.outputs.tag }}
+            type=semver,pattern={{version}},value=${{ needs.dependabot-version.outputs.version }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
