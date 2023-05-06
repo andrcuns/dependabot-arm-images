@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - main
-      - build-on-release
     paths:
       - Gemfile.lock
 

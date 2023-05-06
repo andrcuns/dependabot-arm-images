@@ -2,6 +2,4 @@
 
 source "https://rubygems.org"
 
-# gem "rails"
-
-gem "dependabot-omnibus", "~> 0.216.2"
+gem "dependabot-omnibus", "~> 0.217.0"
