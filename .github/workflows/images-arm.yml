@@ -1,4 +1,4 @@
-name: Build dependabot arm images
+name: arm-images
 
 on:
   workflow_dispatch:
