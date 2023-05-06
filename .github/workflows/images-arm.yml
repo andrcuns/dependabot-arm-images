@@ -120,7 +120,7 @@ jobs:
 
       - name: Update base images
         run: |
-          ls */Dockerfile | xargs sed -i '' 's#dependabot/dependabot-updater-core#andrcuns/dependabot-updater-core#g'
+          ls */Dockerfile | xargs sed -i 's#dependabot/dependabot-updater-core#andrcuns/dependabot-updater-core#g'
 
       - name: Build and push
         uses: docker/build-push-action@v4.0.0
