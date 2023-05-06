@@ -118,9 +118,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Update base images
+      - name: Update base image
         run: |
-          ls */Dockerfile | xargs sed -i 's#dependabot/dependabot-updater-core#andrcuns/dependabot-updater-core#g'
+          sed -i 's#dependabot/dependabot-updater-core#andrcuns/dependabot-updater-core#g' ${{ matrix.suite.name }}/Dockerfile
 
       - name: Build and push
         uses: docker/build-push-action@v4.0.0
