@@ -29,7 +29,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ghcr.io/andrcuns/dependabot-updater-core
-          flavor: latest=false
+          flavor: latest=true
           tags: |
             type=semver,pattern={{version}},value=${{ steps.latest-tag.outputs.tag }}
 
@@ -49,6 +49,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4.0.0
         with:
+          context: .
           push: true
           platforms: linux/amd64,linux/arm64
           cache-from: type=gha
@@ -100,7 +101,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ghcr.io/andrcuns/dependabot-updater-${{ matrix.suite.ecosystem }}
-          flavor: latest=false
+          flavor: latest=true
           tags: |
             type=semver,pattern={{version}},value=${{ steps.latest-tag.outputs.tag }}
 
@@ -124,6 +125,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4.0.0
         with:
+          context: .
           push: true
           platforms: linux/amd64,linux/arm64
           cache-from: type=registry,ref=ghcr.io/andrcuns/dependabot-updater-${{ matrix.suite.ecosystem }}:latest
