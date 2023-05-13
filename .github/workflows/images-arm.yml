@@ -137,3 +137,19 @@ jobs:
           cache-to: type=inline
           tags: ${{ steps.tags.outputs.tags }}
           file: ${{ matrix.suite.name }}/Dockerfile
+
+  notify-release:
+    name: Notify release for dependabot-gitlab
+    runs-on: ubuntu-latest
+    needs:
+      - build-push-core-image
+      - build-push-updater-image
+    steps:
+      - name: Notify
+        run: |
+          curl \
+            -X POST \
+            -H "Content-Type: application/json" \
+            -H "X-Gitlab-Token: ${{ secrets.API_AUTH_TOKEN }}" \
+            -d '{"name": "dependabot-omnibus", "package_ecosystem": "bundler"}' \
+            https://dependabot-gitlab.com/api/notify_release
