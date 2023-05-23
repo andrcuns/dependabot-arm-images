@@ -39,7 +39,7 @@ jobs:
         id: tags
         uses: docker/metadata-action@v4
         with:
-          images: ghcr.io/andrcuns/dependabot-updater-core
+          images: ghcr.io/dependabot-gitlab/dependabot-updater-core
           flavor: latest=true
           tags: |
             type=semver,pattern={{version}},value=${{ needs.dependabot-version.outputs.version }}
@@ -105,7 +105,7 @@ jobs:
         id: tags
         uses: docker/metadata-action@v4
         with:
-          images: ghcr.io/andrcuns/dependabot-updater-${{ matrix.suite.ecosystem }}
+          images: ghcr.io/dependabot-gitlab/dependabot-updater-${{ matrix.suite.ecosystem }}
           flavor: latest=true
           tags: |
             type=semver,pattern={{version}},value=${{ needs.dependabot-version.outputs.version }}
@@ -125,7 +125,7 @@ jobs:
 
       - name: Update base image
         run: |
-          sed -i 's#dependabot/dependabot-updater-core#andrcuns/dependabot-updater-core#g' ${{ matrix.suite.name }}/Dockerfile
+          sed -i 's#dependabot/dependabot-updater-core#dependabot-gitlab/dependabot-updater-core#g' ${{ matrix.suite.name }}/Dockerfile
 
       - name: Build and push
         uses: docker/build-push-action@v4.0.0
@@ -133,7 +133,7 @@ jobs:
           context: .
           push: true
           platforms: linux/amd64,linux/arm64
-          cache-from: type=registry,ref=ghcr.io/andrcuns/dependabot-updater-${{ matrix.suite.ecosystem }}:latest
+          cache-from: type=registry,ref=ghcr.io/dependabot-gitlab/dependabot-updater-${{ matrix.suite.ecosystem }}:latest
           cache-to: type=inline
           tags: ${{ steps.tags.outputs.tags }}
           file: ${{ matrix.suite.name }}/Dockerfile
