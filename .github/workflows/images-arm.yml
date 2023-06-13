@@ -58,7 +58,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
-        uses: docker/build-push-action@v4.1.0
+        uses: docker/build-push-action@v4.1.1
         with:
           context: .
           push: true
@@ -128,7 +128,7 @@ jobs:
           sed -i 's#dependabot/dependabot-updater-core#dependabot-gitlab/dependabot-updater-core#g' ${{ matrix.suite.name }}/Dockerfile
 
       - name: Build and push
-        uses: docker/build-push-action@v4.1.0
+        uses: docker/build-push-action@v4.1.1
         with:
           context: .
           push: true
