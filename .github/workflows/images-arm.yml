@@ -150,6 +150,6 @@ jobs:
           curl \
             -X POST \
             -H "Content-Type: application/json" \
-            -H "Authorization: Basic ${{secret.API_AUTH_TOKEN}}" \
+            -H "Authorization: Basic ${{secrets.API_AUTH_TOKEN}}" \
             -d '{"name": "dependabot-omnibus", "package_ecosystem": "bundler"}' \
             https://dependabot-gitlab.com/api/v2/notify_release
