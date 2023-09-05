@@ -16,7 +16,7 @@ jobs:
       version: ${{ steps.dependabot-version.outputs.version }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Fetch dependabot version
         id: dependabot-version
@@ -30,7 +30,7 @@ jobs:
     needs: dependabot-version
     steps:
       - name: Checkout dependabot repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: dependabot/dependabot-core
           ref: v${{ needs.dependabot-version.outputs.version }}
@@ -96,7 +96,7 @@ jobs:
           - { name: terraform, ecosystem: terraform }
     steps:
       - name: Checkout dependabot repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: dependabot/dependabot-core
           ref: v${{ needs.dependabot-version.outputs.version }}
