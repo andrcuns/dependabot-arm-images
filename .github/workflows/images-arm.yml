@@ -150,6 +150,6 @@ jobs:
           curl \
             -X POST \
             -H "Content-Type: application/json" \
-            -H Authorization: Basic $(echo -n 'andrcuns:${{secrets.DEPENDABOT_GITLAB_PASSWORD}}' | base64)" \
+            -H Authorization: Basic $(echo -n 'andrcuns:${{ secrets.DEPENDABOT_GITLAB_PASSWORD }}' | base64)" \
             -d '{"name": "dependabot-omnibus", "package_ecosystem": "bundler"}' \
             https://dependabot-gitlab.com/api/v2/notify_release
