@@ -37,7 +37,7 @@ jobs:
 
       - name: Docker tags
         id: tags
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: ghcr.io/dependabot-gitlab/dependabot-updater-core
           flavor: latest=true
@@ -103,7 +103,7 @@ jobs:
 
       - name: Docker tags
         id: tags
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: ghcr.io/dependabot-gitlab/dependabot-updater-${{ matrix.suite.ecosystem }}
           flavor: latest=true
