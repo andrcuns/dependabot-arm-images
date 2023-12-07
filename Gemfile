@@ -2,4 +2,4 @@
 
 source "https://rubygems.org"
 
-gem "dependabot-omnibus", "~> 0.237.0"
+gem "dependabot-omnibus", "~> 0.238.0"
