@@ -134,6 +134,7 @@ jobs:
         with:
           context: .
           push: true
+          # skip arm64 build for nuget due to issues with qemu: https://gitlab.com/qemu-project/qemu/-/issues/249
           platforms: ${{ matrix.suite.name == 'nuget' && 'linux/amd64' || 'linux/amd64,linux/arm64' }}
           cache-from: type=registry,ref=ghcr.io/dependabot-gitlab/dependabot-updater-${{ matrix.suite.ecosystem }}:latest
           cache-to: type=inline
