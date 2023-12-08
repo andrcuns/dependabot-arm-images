@@ -34,6 +34,7 @@ jobs:
         with:
           repository: dependabot/dependabot-core
           ref: v${{ needs.dependabot-version.outputs.version }}
+          submodules: recursive
 
       - name: Docker tags
         id: tags
@@ -100,6 +101,7 @@ jobs:
         with:
           repository: dependabot/dependabot-core
           ref: v${{ needs.dependabot-version.outputs.version }}
+          submodules: recursive
 
       - name: Docker tags
         id: tags
