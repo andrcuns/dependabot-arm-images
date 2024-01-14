@@ -1,3 +1,5 @@
 # core-images
 
-Project containing workflow to build [dependabot-core](https://github.com/dependabot/dependabot-core) multi-arch images when a new version is published to rubygems
+Project containing [dependabot-core](https://github.com/dependabot/dependabot-core) multi-arch release images.
+
+Image are built and pushed from [core-images](https://gitlab.com/dependabot-gitlab/core-images) on GitLab.
